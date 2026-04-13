@@ -65,7 +65,7 @@ Final Answer:
 
 async def map_reduce_pipeline(chunks, analysis, llm, file_name):
 
-    BATCH_SIZE = 5
+    BATCH_SIZE = 25
 
     batched_chunks = [
         chunks[i:i+BATCH_SIZE]

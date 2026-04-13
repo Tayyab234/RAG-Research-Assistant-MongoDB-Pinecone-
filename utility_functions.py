@@ -161,7 +161,7 @@ async def get_user_documents(user_id: str, active_files):
     if not active_files:
         return []
 
-    files = await user_files_collection.find(
+    files = await file_data_collection.find(
         {
             "user_id": user_id,
             "file_id": {"$in": active_files}
@@ -182,7 +182,6 @@ async def process_full_documents(analysis, user_id, llm,request):
         file_name = file_doc.get("filename", "unknown")
 
         full_text = " ".join(chunks)
-
         total_tokens = estimate_tokens(full_text)
 
         if total_tokens > MAX_ALLOWED_DOC_TOKENS:
@@ -205,7 +204,6 @@ async def process_full_documents(analysis, user_id, llm,request):
                 "context": full_text,
                 "sources": file_name
             }
-            
             result= await generate_answer(analysis,context_data, llm, request)
 
             results.append({
@@ -232,7 +230,6 @@ async def retrieval_layer(analysis, llm, user_id,request):
         active_files=active_files,
         request=request
     )
-    
    # Step 1: retrieve from Pinecone
     docs = retriever.invoke(analysis["Query"])
     if not docs:
